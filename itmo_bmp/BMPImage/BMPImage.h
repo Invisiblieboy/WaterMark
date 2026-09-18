@@ -26,6 +26,6 @@ namespace itmo_bmp{
         status_code set_pixel_color(int x, int y, Pixel* pixel);
     
     private:
-        Pixel** image;
+        Pixel** image = nullptr;
     };
 };
