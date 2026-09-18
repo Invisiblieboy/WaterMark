@@ -25,5 +25,9 @@ namespace itmo_bmp{
         // Точечная работа с пикселями
         Pixel get_pixel_color(int x, int y);
         status_code set_pixel_color(int x, int y, Pixel* pixel);
+    
+    private:
+        Pixel** image;
+
     };
-}
+};
