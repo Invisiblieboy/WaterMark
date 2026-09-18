@@ -12,7 +12,6 @@ namespace itmo_bmp{
         kOK, kFileNotFound, kUnknownError
     };
 
-
     class BMPImage {
     public:
         BMPImage();
@@ -28,6 +27,5 @@ namespace itmo_bmp{
     
     private:
         Pixel** image;
-
     };
 };
