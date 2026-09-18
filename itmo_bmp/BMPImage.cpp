@@ -8,3 +8,7 @@ namespace itmo_bmp{
 
 
 };
+
+int main(){
+    return 0;
+}
