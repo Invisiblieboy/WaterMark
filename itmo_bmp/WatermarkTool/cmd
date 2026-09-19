@@ -1,0 +1,24 @@
+#!/bin/bash
+
+case "$1" in
+  "clear")
+    echo "Очистка проекта..."
+    rm -f ../../build/app
+    ;;
+  "run")
+    shift
+    echo "Компиляция проекта..."
+    clang++ -std=c++17 -o ../../build/app main.cpp ArgumentParser.cpp
+    
+    if [ $? -eq 0 ]; then
+        echo "Всё гуд :)   ЗАПУСКАЮ"
+        ../../build/app "$@"
+    else
+        echo ":("
+    fi
+    ;;
+  *)
+    echo "Компиляция проекта..."
+    clang++ -std=c++17 -o ../../build/app main.cpp ArgumentParser.cpp
+    ;;
+esac
