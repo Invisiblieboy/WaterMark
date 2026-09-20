@@ -1,5 +1,5 @@
 #include "ArgumentParser.h"
-#include <cstdio>
+#include "Logger.h"
 
 using namespace itmo_bmp;
 
@@ -10,10 +10,13 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  printf("[Debug]: Cood Parsing.\n");
-  printf("\tMainPicture: %s\n", validated_args.main_path_picture);
-  printf("\tWatermarkPicture: %s\n", validated_args.watermark_path_picture);
-  printf("\tResultPicture: %s\n", validated_args.result_path_picture);
+  Logger::Info("Parsed data:\n"
+               "\tMainPicture: %s\n"
+               "\tWatermarkPicture: %s\n"
+               "\tResultPicture: %s",
+               validated_args.main_path_picture,
+               validated_args.watermark_path_picture,
+               validated_args.result_path_picture);
 
   return 0;
 }

@@ -9,8 +9,6 @@ struct ValidatedArguments {
   char *result_path_picture;
 };
 
-bool validatePath(const char *c_path);
-
 bool parseAndValidateArguments(int argc, char *argv[],
                                ValidatedArguments *args);
 
