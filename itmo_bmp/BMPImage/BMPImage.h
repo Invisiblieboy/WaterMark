@@ -2,14 +2,14 @@
 #include <cstdint>
 
 namespace itmo_bmp{
-    class Pixel {
+    struct Pixel {
         uint8_t r = 0;
         uint8_t g = 0;
         uint8_t b = 0;
     };
 
     enum status_code{
-        kOK, kFileNotFound, kPermissionDenied, kInvalidArg, kUnknownError
+        kOK, kFileNotFound, kPermissionDenied, kInvalidArg, kEmptyFile, kInvalidFile, kUnknownError, 
     };
 
     class BMPImage {
@@ -21,11 +21,11 @@ namespace itmo_bmp{
         status_code load(const char* file_name);
         status_code save(const char* file_name);
 
-        status_code gen_empty_sheet(const uint32_t width, const uint32_t height, const uint8_t color_depth);
+        status_code gen_empty_sheet(const int32_t width, const int32_t height, const uint16_t color_depth);
 
         // Точечная работа с пикселями
         Pixel* get_pixel_color(const uint32_t x, const uint32_t y);
-        status_code set_pixel_color(const uint32_t x, const uint32_t y, const Pixel* pixel);
+        status_code set_pixel_color(const uint32_t x, const uint32_t y, const Pixel pixel);
 
     
     private:
