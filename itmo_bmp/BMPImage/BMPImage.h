@@ -24,7 +24,7 @@ namespace itmo_bmp{
         status_code gen_empty_sheet(const int32_t width, const int32_t height, const uint16_t color_depth);
 
         // Точечная работа с пикселями
-        Pixel* get_pixel_color(const uint32_t x, const uint32_t y);
+        status_code get_pixel_color(const uint32_t x, const uint32_t y, Pixel* pixel);
         status_code set_pixel_color(const uint32_t x, const uint32_t y, const Pixel pixel);
 
     

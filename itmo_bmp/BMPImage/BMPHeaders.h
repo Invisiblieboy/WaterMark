@@ -1,4 +1,5 @@
 #include <cstdint>
+#pragma once
 
 namespace itmo_bmp {
 #pragma pack(push, 1)
@@ -8,7 +9,7 @@ struct BMPFileHeader {
     uint32_t size;
     uint16_t reserved1;
     uint16_t reserved2;
-    uint32_t offBits;
+    uint32_t off_bits;
 };
 
 struct BMPInfoHeader {
