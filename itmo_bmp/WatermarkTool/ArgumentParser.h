@@ -9,7 +9,7 @@ struct ValidatedArguments {
   char *result_path_picture;
 };
 
-bool parseAndValidateArguments(int argc, char *argv[],
+bool parse_and_validate_arguments(int argc, char *argv[],
                                ValidatedArguments *args);
 
 } // namespace itmo_bmp

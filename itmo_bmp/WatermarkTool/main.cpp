@@ -6,7 +6,7 @@ using namespace itmo_bmp;
 int main(int argc, char *argv[]) {
   ValidatedArguments validated_args;
 
-  if (!parseAndValidateArguments(argc, argv, &validated_args)) {
+  if (!parse_and_validate_arguments(argc, argv, &validated_args)) {
     return 1;
   }
 

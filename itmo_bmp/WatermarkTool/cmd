@@ -1,24 +1,32 @@
 #!/bin/bash
 
+set -e
+
+BUILD_DIR="../../build"
+SOURCES="main.cpp ArgumentParser.cpp"
+TARGET="$BUILD_DIR/app"
+
 case "$1" in
   "clear")
     echo "Очистка проекта..."
-    rm -f ../../build/app
+    rm -f "$TARGET"
     ;;
   "run")
     shift
     echo "Компиляция проекта..."
-    clang++ -std=c++17 -o ../../build/app main.cpp ArgumentParser.cpp
-    
-    if [ $? -eq 0 ]; then
+    mkdir -p "$BUILD_DIR"
+
+    if clang++ -std=c++17 -Wall -Wextra -o "$TARGET" $SOURCES; then
         echo "Всё гуд :)   ЗАПУСКАЮ"
-        ../../build/app "$@"
+        "$TARGET" "$@"
     else
         echo ":("
+        exit 1
     fi
     ;;
   *)
     echo "Компиляция проекта..."
-    clang++ -std=c++17 -o ../../build/app main.cpp ArgumentParser.cpp
+    mkdir -p "$BUILD_DIR"
+    clang++ -std=c++17 -Wall -Wextra -o "$TARGET" $SOURCES
     ;;
 esac

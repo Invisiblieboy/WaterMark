@@ -1,55 +1,40 @@
 #include <filesystem>
 #include <iostream>
+#include <strings.h>//strcasecmp
 #include <system_error>
+#include <unistd.h>
 
 #include "ArgumentParser.h"
 #include "Logger.h"
 
 namespace fs = std::filesystem;
 namespace itmo_bmp {
-
-bool check_write_permession(const fs::path &path) {
-  fs::file_status s = fs::status(path);
-  fs::perms prms = s.permissions();
-
-  return (prms & fs::perms::owner_write) != fs::perms::none;
-}
-
-bool check_read_permession(const fs::path &path) {
-  fs::file_status s = fs::status(path);
-  fs::perms prms = s.permissions();
-
-  return (prms & fs::perms::owner_read) != fs::perms::none;
+namespace {
+bool check_read_permission(const fs::path &path) {
+  return access(path.c_str(), R_OK) == 0;
 }
 
 bool is_directory_writable(const fs::path &dir_path) {
-  try {
-    if (!fs::exists(dir_path) || !fs::is_directory(dir_path)) {
-      return false;
-    }
-
-    fs::perms p = fs::status(dir_path).permissions();
-
-    if ((p & fs::perms::owner_write) != fs::perms::none ||
-        (p & fs::perms::group_write) != fs::perms::none ||
-        (p & fs::perms::others_write) != fs::perms::none) {
-      return true;
-    }
-  } catch (const fs::filesystem_error &e) {
-    std::cerr << "Ошибка файловой системы: " << e.what() << '\n';
+  std::error_code ec;
+  if (!fs::is_directory(dir_path, ec)) {
+    return false;
   }
 
-  return false;
+  return access(dir_path.c_str(), W_OK | X_OK) == 0;
 }
 
-bool validatePath(const char *c_path) {
+bool has_bmp_extension(const fs::path &path) {
+  return strcasecmp(path.extension().c_str(), ".bmp") == 0;
+}
+
+bool validate_input_path(const char *c_path) {
   if (!c_path) {
     Logger::Error("Передан нулевой указатель (nullptr)!");
     return false;
   }
 
   std::error_code ec;
-  fs::path path = fs::absolute(c_path);
+  fs::path path(c_path);
 
   if (!fs::exists(path, ec)) {
     Logger::Error("Путь не существует или недоступен: %s", path.c_str());
@@ -62,12 +47,12 @@ bool validatePath(const char *c_path) {
     return false;
   }
 
-  if (path.extension() != ".bmp") {
+  if (!has_bmp_extension(path)) {
     Logger::Error("Расширенние файла не .bmp");
     return false;
   }
 
-  if (!check_read_permession(path)) {
+  if (!check_read_permission(path)) {
     Logger::Error("Недостаточно прав для чтения");
     return false;
   }
@@ -75,7 +60,7 @@ bool validatePath(const char *c_path) {
   return true;
 }
 
-bool validateAndCreateOutputPath(const char *c_path) {
+bool validate_and_create_output_path(const char *c_path) {
   if (!c_path) {
     Logger::Error("Передан нулевой указатель для выходного пути!");
     return false;
@@ -89,7 +74,7 @@ bool validateAndCreateOutputPath(const char *c_path) {
     return false;
   }
 
-  if (path.extension() != ".bmp") {
+  if (!has_bmp_extension(path)) {
     Logger::Error("Выходной файл должен иметь расширение .bmp");
     return false;
   }
@@ -126,24 +111,25 @@ bool validateAndCreateOutputPath(const char *c_path) {
 
   return true;
 }
+} // namespace
 
-void printUsage(const char *proga) {
+void print_usage(const char *proga) {
   Logger::Info("Пример вызова:\n\t%s </path/to/file.bmp> "
                "</path/to/watermark.bmp> <path/to/result.bmp>",
                proga);
 }
 
-bool parseAndValidateArguments(int argc, char *argv[],
-                               ValidatedArguments *args) {
+bool parse_and_validate_arguments(int argc, char *argv[],
+                                  ValidatedArguments *args) {
   if (argc != 4) {
     Logger::Error("Неверное количество переданных аргументов");
-    printUsage(argv[0]);
+    print_usage(argv[0]);
     return false;
   }
 
-  if (!validatePath(argv[1]) || !validatePath(argv[2]) ||
-      !validateAndCreateOutputPath(argv[3])) {
-    printUsage(argv[0]);
+  if (!validate_input_path(argv[1]) || !validate_input_path(argv[2]) ||
+      !validate_and_create_output_path(argv[3])) {
+    print_usage(argv[0]);
     return false;
   }
 
