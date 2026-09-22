@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <vector>
 
 namespace itmo_bmp{
     struct Pixel {
@@ -29,11 +30,9 @@ namespace itmo_bmp{
 
     
     private:
-        uint32_t width_;
-        uint32_t height_;
-        uint8_t color_depth_;
-        Pixel* image_ ;
-
-        Pixel* memory_preparation_(const uint32_t len);
+        uint32_t width_ = 0;
+        uint32_t height_ = 0;
+        uint8_t color_depth_ = 0;
+        std::vector<Pixel> image_ ;
     };
 } // namespace itmo_bmp
