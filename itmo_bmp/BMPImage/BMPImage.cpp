@@ -10,6 +10,12 @@ namespace itmo_bmp {
 BMPImage::BMPImage() {}
 BMPImage::~BMPImage() {}
 
+uint32_t BMPImage::get_width() { return width_; }
+
+uint32_t BMPImage::get_height() { return height_; }
+
+uint32_t BMPImage::get_color_depth() { return color_depth_; }
+
 status_code BMPImage::load(const char* file_name) {
   std::ifstream file(file_name, std::ios::binary);
 

@@ -25,6 +25,9 @@ class BMPImage {
   ~BMPImage();
 
   // Публичное API класса
+  uint32_t get_width();
+  uint32_t get_height();
+  uint32_t get_color_depth();
   status_code load(const char* file_name);
   status_code save(const char* file_name);
 
