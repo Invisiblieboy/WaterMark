@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -e
+
+BUILD_DIR="../../build"
+SOURCES="main.cpp ArgumentParser.cpp ../BMPImage/BMPImage.cpp Watermark.cpp"
+TARGET="$BUILD_DIR/app"
+
+case "$1" in
+  "clear")
+    echo "Очистка проекта..."
+    rm -f "$TARGET"
+    ;;
+  "run")
+    shift
+    echo "Компиляция проекта..."
+    mkdir -p "$BUILD_DIR"
+
+    if clang++ -std=c++17 -Wall -Wextra -g -O0 -fsanitize=address,undefined -o "$TARGET" $SOURCES; then
+        echo "Всё гуд :)   ЗАПУСКАЮ"
+        "$TARGET" "$@"
+    else
+        echo ":("
+        exit 1
+    fi
+    ;;
+  *)
+    echo "Компиляция проекта..."
+    mkdir -p "$BUILD_DIR"
+    clang++ -std=c++17 -Wall -Wextra -o "$TARGET" $SOURCES
+    ;;
+esac
