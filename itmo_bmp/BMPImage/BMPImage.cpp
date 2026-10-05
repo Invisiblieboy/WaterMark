@@ -6,7 +6,6 @@
 
 #include "BMPHeaders.h"
 
-// TODO Комменты к коду + если файл записан наоборот снизу вверх
 namespace itmo_bmp {
 BMPImage::BMPImage() {}
 BMPImage::~BMPImage() {}
@@ -49,7 +48,7 @@ status_code BMPImage::load(const char* file_name) {
   for (uint32_t i = 0; i < height_; ++i) {
     file.read(reinterpret_cast<char*>(row.data()), row_size);
 
-    uint32_t y = height_ - 1 - i;
+    uint32_t y = info_header.height > 0 ? height_ - 1 - i : i;
     for (uint32_t x = 0; x < width_; x++) {
       Pixel pxl;
       if (color_depth_ == 8) {
@@ -149,7 +148,7 @@ status_code BMPImage::set_pixel_color(uint32_t x, uint32_t y,
 int main() {
   itmo_bmp::BMPImage img;
 
-  img.load("test.bmp");
+  std::cout << img.load("images/bmp_24.bmp") << std::endl;
   itmo_bmp::Pixel red;
   red.r = 255;
   itmo_bmp::Pixel blue;
@@ -160,7 +159,7 @@ int main() {
   for (int i = 50; i < 400; i += 2) {
     img.set_pixel_color(i, i, red);
   }
-  img.save("test2.bmp");
+  std::cout << img.save("test2.bmp") << std::endl;
   itmo_bmp::BMPImage image2 = img;
   return 0;
 }
