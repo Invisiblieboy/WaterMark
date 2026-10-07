@@ -1,1 +1,21 @@
 itmo_bmp/BMPImage/main.cpp
+# Executables
+*.exe
+*.out
+*.app
+
+# Build directories
+build/
+Build/
+build-*/
+
+
+# test output & cache
+Testing/
+.cache/
+
+# Temporary files
+*.tmp
+*.log
+*.bak
+*.swp
