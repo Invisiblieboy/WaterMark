@@ -1,7 +1,6 @@
 #include "BMPImage.h"
 
 #include <fstream>
-#include <iostream>
 #include <vector>
 
 #include "BMPHeaders.h"
@@ -144,22 +143,3 @@ status_code BMPImage::set_pixel_color(uint32_t x, uint32_t y,
   return status_code::kOK;
 }
 }  // namespace itmo_bmp
-
-int main() {
-  itmo_bmp::BMPImage img;
-
-  std::cout << img.load("images/bmp_24.bmp") << std::endl;
-  itmo_bmp::Pixel red;
-  red.r = 255;
-  itmo_bmp::Pixel blue;
-  blue.b = 255;
-  for (int i = 0; i < 90; i += 2) {
-    img.set_pixel_color(100 + i, 100 - i, blue);
-  }
-  for (int i = 50; i < 400; i += 2) {
-    img.set_pixel_color(i, i, red);
-  }
-  std::cout << img.save("test2.bmp") << std::endl;
-  itmo_bmp::BMPImage image2 = img;
-  return 0;
-}
