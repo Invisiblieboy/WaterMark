@@ -7,26 +7,19 @@ on:
     branches: [main, dev]
 
 env:
-  BUILD_DIR: ../../build
-  SOURCES: main.cpp ArgumentParser.cpp ../BMPImage/BMPImage.cpp Watermark.cpp
+  SOURCES: itmo_bmp/WatermarkTool/main.cpp itmo_bmp/WatermarkTool/ArgumentParser.cpp itmo_bmp/BMPImage/BMPImage.cpp itmo_bmp/WatermarkTool/Watermark.cpp
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./itmo_bmp/WatermarkTool
     steps:
       - uses: actions/checkout@v4
 
-      - name: Создать папку сборки
-        run: mkdir -p "$BUILD_DIR"
-
       - name: Build
-        run: clang++ -std=c++17 -Wall -Wextra -o "$BUILD_DIR/app" $SOURCES
+        run: clang++ -std=c++17 -Wall -Wextra -o "watermark" $SOURCES
 
       - name: Build (san)
         run: >
           clang++ -std=c++17 -Wall -Wextra -g -O0
           -fsanitize=address,undefined
-          -o "$BUILD_DIR/app_debug" $SOURCES
+          -o "watermark_debug" $SOURCES

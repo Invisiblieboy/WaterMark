@@ -15,7 +15,7 @@ const char* status_msg[] = {
   "kUnknownError",
 };
 
-bool try_load(BMPImage& image, const char* path, const char *what) {
+bool try_load(BMPImage& image, const char* path, const char* what) {
   status_code code = image.load(path);
   if (code != status_code::kOK) {
     Logger::Error("Не удалось загрузить %s (%s): %s", what, path, status_msg[code]);;
@@ -26,7 +26,7 @@ bool try_load(BMPImage& image, const char* path, const char *what) {
   }
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   ValidatedArguments validated_args;
 
   if (!parse_and_validate_arguments(argc, argv, &validated_args)) {

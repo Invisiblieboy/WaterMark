@@ -9,8 +9,8 @@ Pixel calc_merge_color(Pixel a, Pixel b) {
           .b = (uint8_t)((a.b + b.b) / 2)};
 }
 
-bool apply_watermark(BMPImage &base, BMPImage &watermark,
-                     const char *output_path) {
+bool apply_watermark(BMPImage& base, BMPImage& watermark,
+                     const char* output_path) {
   const uint32_t w_base = base.get_width();
   const uint32_t h_base = base.get_height();
   const uint32_t w_water = watermark.get_width();
