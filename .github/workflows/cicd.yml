@@ -13,7 +13,9 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    working-directory: ./itmo_bmp/WatermarkTool
+    defaults:
+      run:
+        working-directory: ./itmo_bmp/WatermarkTool
     steps:
       - uses: actions/checkout@v4
 
