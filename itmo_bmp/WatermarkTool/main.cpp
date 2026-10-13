@@ -5,7 +5,7 @@
 
 using namespace itmo_bmp;
 
-const char* erroreMsg[] = {
+const char* status_msg[] = {
   "kOK",
   "kFileNotFound",
   "kPermissionDenied",
@@ -15,13 +15,13 @@ const char* erroreMsg[] = {
   "kUnknownError",
 };
 
-bool try_load(BMPImage& image, const char* path) {
+bool try_load(BMPImage& image, const char* path, const char *what) {
   status_code code = image.load(path);
   if (code != status_code::kOK) {
-    Logger::Error("Не получилось лол, подробней: %s", erroreMsg[code]);
+    Logger::Error("Не удалось загрузить %s (%s): %s", what, path, status_msg[code]);;
     return false;
   } else {
-    // Logger::Info("Всё ок: %s", erroreMsg[code]);
+    Logger::Info("Загружен файл (%s): %s", what, path);
     return true;
   }
 }
@@ -34,15 +34,16 @@ int main(int argc, char *argv[]) {
   }
 
   BMPImage main, watermark;
-  if (!try_load(main, validated_args.main_path_picture) ||
-      !try_load(watermark, validated_args.watermark_path_picture)) {
+  if (!try_load(main, validated_args.main_path_picture, "основное изображение") ||
+      !try_load(watermark, validated_args.watermark_path_picture, "водяной знак")) {
     return 1;
   }
   
   if(apply_watermark(main, watermark, validated_args.result_path_picture)) {
-    Logger::Info("Вводный знак успешно наложен!");
+    Logger::Info("Водяной знак успешно наложен!");
   } else {
-    Logger::Error("ЧТО-ТО пошло не так!");
+    Logger::Error("Не удалось наложить водяной знак");
+    return 1;
   }
 
   return 0;
