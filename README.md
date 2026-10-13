@@ -8,7 +8,7 @@
 
 - [Используемые технологии](#используемые-технологии)
 - [Цели](#цели)
-- [Как запустить проект](#как-это-работает)
+- [Как запустить проект](#как-запустить-проект)
 - [Как это работает](#как-это-работает)
 - [Поддерживаемый формат](#поддерживаемый-формат)
 - [Требования](#требования)
@@ -38,12 +38,10 @@
 Все команды выполняются из корня репозитория.
 
 ```bash
-mkdir -p build
-g++ -std=c++17 -Wall -Wextra -O2 -o build \
-    itmo_bmp/WatermarkTool/main.cpp \
-    itmo_bmp/WatermarkTool/ArgumentParser.cpp \
-    itmo_bmp/WatermarkTool/Watermark.cpp \
-    itmo_bmp/BMPImage/BMPImage.cpp
+clang++ -std=c++17 -Wall -Wextra -O2 -o build     itmo_bmp/WatermarkTool/main.cpp\
+     itmo_bmp/WatermarkTool/ArgumentParser.cpp\
+     itmo_bmp/WatermarkTool/Watermark.cpp\
+     itmo_bmp/BMPImage/BMPImage.cpp
 ```
 
 Вместо `g++` можно использовать `clang++`.
@@ -121,9 +119,9 @@ g++ -std=c++17 -Wall -Wextra -O2 -o build \
 (64×48, белый):
 
 **Исходное изображение**</br>
-![Исходное изображение](images/photo.bmp)</br>
+![Исходное изображение](images/bmp_24.bmp)</br>
 **Водяной знак**</br>
-![Водяной знак](images/logo.bmp)</br>
+![Водяной знак](images/watermark_test.bmp)</br>
 
 ```bash
 ./build images/photo.bmp images/logo.bmp images/result.bmp
@@ -137,11 +135,8 @@ g++ -std=c++17 -Wall -Wextra -O2 -o build \
 [WatermarkTool:INFO] Водяной знак успешно наложен, результат: result.bmp
 ```
 **Резултат**</br>
-![Результат](images/result.bmp)</br>
+![Результат](images/res1.bmp)</br>
 
-Знак 64×48 повторяется по изображению 640×480 плиткой 10×10. Пиксель синего цвета
-`(30, 120, 200)` и белого `(255, 255, 255)` даёт `((30+255)/2, (120+255)/2, (200+255)/2)`,
-то есть `(142, 187, 227)` - более светлый оттенок синего.
 
 ### Что происходит в особых случаях
 
