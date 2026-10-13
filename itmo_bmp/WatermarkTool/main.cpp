@@ -43,6 +43,7 @@ int main(int argc, char *argv[]) {
     Logger::Info("Водяной знак успешно наложен!");
   } else {
     Logger::Error("Не удалось наложить водяной знак");
+    return 1;
   }
 
   return 0;
