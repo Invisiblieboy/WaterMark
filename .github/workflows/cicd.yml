@@ -7,7 +7,7 @@ on:
     branches: [main, dev]
 
 env:
-  SOURCES: main.cpp ArgumentParser.cpp ../BMPImage/BMPImage.cpp Watermark.cpp
+  SOURCES: itmo_bmp/WatermarkTool/main.cpp itmo_bmp/WatermarkTool/ArgumentParser.cpp itmo_bmp/BMPImage/BMPImage.cpp itmo_bmp/WatermarkTool/Watermark.cpp
 
 jobs:
   build:
