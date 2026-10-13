@@ -140,7 +140,7 @@ status_code BMPImage::set_pixel_color(uint32_t x, uint32_t y,
 
   return status_code::kOK;
 }
-}  // namespace itmo_bmp
+
 
 int main() {
   itmo_bmp::BMPImage img;
@@ -160,3 +160,4 @@ int main() {
   itmo_bmp::BMPImage image2 = img;
   return 0;
 }
+}  // namespace itmo_bmp
