@@ -30,27 +30,25 @@
 -	Разобраться с форматом изображений BMP: чтение заголовка файла, пиксельных данных; научиться сохранять изменённое изображение в правильном формате.
 -	Реализовать простой алгоритм наложения водяного знака на изображение (визуальное наложение, чтобы исходное изображение оставалось видимым).
 -	Настроить простейший CI (Continuous Integration) с помощью GitHub Actions для автоматической сборки и тестирования проекта при обновлениях репозитория.
--	Оформить документацию в файле README, описав работу программы, структуру проекта, инструкции по сборке и использованию, а также результаты тестовых запусков.
+-	Оформить документацию в файле README, описав работу программы, инструкции по сборке и использованию, а также результаты тестовых запусков.
 
 ## Как запустить проект
 
-### Сборка
-
 Все команды выполняются из корня репозитория.
 
+### Сборка
+
 ```bash
-clang++ -std=c++17 -Wall -Wextra -O2 -o build     itmo_bmp/WatermarkTool/main.cpp\
+clang++ -std=c++17 -Wall -Wextra -O2 -o watermark     itmo_bmp/WatermarkTool/main.cpp\
      itmo_bmp/WatermarkTool/ArgumentParser.cpp\
      itmo_bmp/WatermarkTool/Watermark.cpp\
      itmo_bmp/BMPImage/BMPImage.cpp
 ```
 
-Вместо `g++` можно использовать `clang++`.
-
 ### Запуск
 
 ```bash
-./build <основное.bmp> <водяной_знак.bmp> <результат.bmp>
+./watermark <основное.bmp> <водяной_знак.bmp> <результат.bmp>
 ```
 
 | Аргумент | Что это |
@@ -110,14 +108,11 @@ clang++ -std=c++17 -Wall -Wextra -O2 -o build     itmo_bmp/WatermarkTool/main.cp
 
 - **ОС:** Linux или macOS (код использует POSIX-заголовки `unistd.h` и `strings.h`);
 - **Компилятор** с поддержкой C++17 и `std::filesystem`:
-  g++ 9 или новее, либо clang++ 10 или новее;
-- **Для тестов:** библиотека Google Test (`libgtest-dev` на Ubuntu/Debian,
-  `brew install googletest` на macOS).
+  clang++ 10 или новее;
 
 ## Пример
 
-Исходное изображение `photo.bmp` (640×480, синий фон) и водяной знак `logo.bmp`
-(64×48, белый):
+Исходное изображение `bmp_24.bmp` и водяной знак `watermark_test.bmp`:
 
 **Исходное изображение**</br>
 ![Исходное изображение](images/bmp_24.bmp)</br>
@@ -125,17 +120,17 @@ clang++ -std=c++17 -Wall -Wextra -O2 -o build     itmo_bmp/WatermarkTool/main.cp
 ![Водяной знак](images/watermark_test.bmp)</br>
 
 ```bash
-./build images/photo.bmp images/logo.bmp images/result.bmp
+./watermark images/photo.bmp images/logo.bmp images/result.bmp
 ```
 
 Вывод:
 
 ```
-[WatermarkTool:INFO] Загружен файл (основное изображение): photo.bmp, 640x480
-[WatermarkTool:INFO] Загружен файл (водяной знак): logo.bmp, 64x48
-[WatermarkTool:INFO] Водяной знак успешно наложен, результат: result.bmp
+[WatermarkTool:INFO] Загружен файл (основное изображение): images/bmp_24.bmp
+[WatermarkTool:INFO] Загружен файл (водяной знак): images/watermark_test.bmp
+[WatermarkTool:INFO] Водяной знак успешно наложен!
 ```
-**Резултат**</br>
+**Результат**</br>
 ![Результат](images/res1.bmp)</br>
 
 

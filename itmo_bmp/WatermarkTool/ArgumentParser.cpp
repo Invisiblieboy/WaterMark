@@ -27,7 +27,7 @@ bool has_bmp_extension(const fs::path &path) {
   return strcasecmp(path.extension().c_str(), ".bmp") == 0;
 }
 
-bool validate_input_path(const char *c_path) {
+bool validate_input_path(const char* c_path) {
   if (!c_path) {
     Logger::Error("Передан нулевой указатель (nullptr)!");
     return false;
@@ -60,7 +60,7 @@ bool validate_input_path(const char *c_path) {
   return true;
 }
 
-bool validate_and_create_output_path(const char *c_path) {
+bool validate_and_create_output_path(const char* c_path) {
   if (!c_path) {
     Logger::Error("Передан нулевой указатель для выходного пути!");
     return false;
@@ -113,14 +113,14 @@ bool validate_and_create_output_path(const char *c_path) {
 }
 } // namespace
 
-void print_usage(const char *proga) {
+void print_usage(const char* proga) {
   Logger::Info("Пример вызова:\n\t%s </path/to/file.bmp> "
                "</path/to/watermark.bmp> <path/to/result.bmp>",
                proga);
 }
 
-bool parse_and_validate_arguments(int argc, char *argv[],
-                                  ValidatedArguments *args) {
+bool parse_and_validate_arguments(int argc, char* argv[],
+                                  ValidatedArguments* args) {
   if (argc != 4) {
     Logger::Error("Неверное количество переданных аргументов");
     print_usage(argv[0]);
