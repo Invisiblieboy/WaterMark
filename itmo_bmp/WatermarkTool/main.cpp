@@ -21,7 +21,7 @@ bool try_load(BMPImage& image, const char* path) {
     Logger::Error("Не получилось лол, подробней: %s", erroreMsg[code]);
     return false;
   } else {
-    Logger::Info("Всё ок: %s", erroreMsg[code]);
+    // Logger::Info("Всё ок: %s", erroreMsg[code]);
     return true;
   }
 }
