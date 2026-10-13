@@ -27,7 +27,7 @@ bool apply_watermark(BMPImage &base, BMPImage &watermark,
   }
 
   BMPImage res;
-  res.gen_empty_sheet(w_base, h_base, base.get_color_depth());
+  res.gen_empty_sheet(w_base, h_base);
 
   Pixel a, b;
   for (uint32_t i = 0; i < h_base; ++i) {
