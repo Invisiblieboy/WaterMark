@@ -13,8 +13,6 @@ uint32_t BMPImage::get_width() { return width_; }
 
 uint32_t BMPImage::get_height() { return height_; }
 
-uint32_t BMPImage::get_color_depth() { return color_depth_; }
-
 status_code BMPImage::load(const char* file_name) {
   std::ifstream file(file_name, std::ios::binary);
 
@@ -36,11 +34,15 @@ status_code BMPImage::load(const char* file_name) {
   if (file_header.type != 0x4D42) {
     return status_code::kInvalidFile;  // не BMP
   }
+  if (info_header.bit_count != 24 || info_header.compression != 0) {
+    return status_code::kInvalidFile;  // поддерживается только 24-битный
+                                       // несжатый BMP
+  }
 
   // Переходим к пикселям по off_bits
   file.seekg(file_header.off_bits, std::ios::beg);
 
-  gen_empty_sheet(info_header.width, info_header.height, info_header.bit_count);
+  gen_empty_sheet(info_header.width, info_header.height);
   uint32_t row_size = ((info_header.bit_count * width_ + 31) / 32) * 4;
   std::vector<uint8_t> row(row_size);
 
@@ -50,20 +52,16 @@ status_code BMPImage::load(const char* file_name) {
     uint32_t y = info_header.height > 0 ? height_ - 1 - i : i;
     for (uint32_t x = 0; x < width_; x++) {
       Pixel pxl;
-      if (color_depth_ == 8) {
-        pxl.b = row[x];
-        pxl.g = row[x];
-        pxl.r = row[x];
-      } else if (color_depth_ == 24) {
-        pxl.b = row[3 * x];
-        pxl.g = row[3 * x + 1];
-        pxl.r = row[3 * x + 2];
-      } else
-        return status_code::kInvalidFile;
+      pxl.b = row[3 * x];
+      pxl.g = row[3 * x + 1];
+      pxl.r = row[3 * x + 2];
       set_pixel_color(x, y, pxl);
     }
   }
   file.close();
+  if (file.is_open()) {
+    return status_code::kUnknownError;
+  }
   return status_code::kOK;
 }
 
@@ -108,12 +106,19 @@ status_code BMPImage::save(const char* file_name) {
     }
     file.write(reinterpret_cast<char*>(row.data()), row_size);
   }
+  file.close();
+  if (file.is_open()) {
+    return status_code::kUnknownError;
+  }
   return status_code::kOK;
 }
 
 status_code BMPImage::get_pixel_color(const uint32_t x, const uint32_t y,
                                       Pixel* pixel) {
   // Изменяет пиксель под указателем на нужный(по координатам)
+  if (pixel == nullptr) {
+    return status_code::kInvalidArg;
+  }
   if (x >= width_ || y >= height_) {
     return status_code::kInvalidArg;
   }
@@ -121,15 +126,10 @@ status_code BMPImage::get_pixel_color(const uint32_t x, const uint32_t y,
   return status_code::kOK;
 }
 
-status_code BMPImage::gen_empty_sheet(const int32_t width, const int32_t height,
-                                      const uint16_t color_depth) {
-  if (color_depth != 8 && color_depth != 24) {
-    return status_code::kInvalidArg;
-  }
-
+status_code BMPImage::gen_empty_sheet(const int32_t width,
+                                      const int32_t height) {
   width_ = width;
   height_ = height > 0 ? height : -height;
-  color_depth_ = color_depth;
   image_ = std::vector<Pixel>(width_ * height_);
   return status_code::kOK;
 }

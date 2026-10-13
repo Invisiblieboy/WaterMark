@@ -27,12 +27,10 @@ class BMPImage {
   // Публичное API класса
   uint32_t get_width();
   uint32_t get_height();
-  uint32_t get_color_depth();
   status_code load(const char* file_name);
   status_code save(const char* file_name);
 
-  status_code gen_empty_sheet(const int32_t width, const int32_t height,
-                              const uint16_t color_depth);
+  status_code gen_empty_sheet(const int32_t width, const int32_t height);
 
   // Точечная работа с пикселями
   status_code get_pixel_color(const uint32_t x, const uint32_t y, Pixel* pixel);
@@ -42,7 +40,6 @@ class BMPImage {
  private:
   uint32_t width_ = 0;
   uint32_t height_ = 0;
-  uint8_t color_depth_ = 0;
   std::vector<Pixel> image_;
 };
 }  // namespace itmo_bmp
