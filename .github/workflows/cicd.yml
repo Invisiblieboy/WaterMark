@@ -23,7 +23,7 @@ jobs:
         run: mkdir -p "$BUILD_DIR"
 
       - name: Build
-        run: clang++ -std=c++17 -Wall -Wextra -o "$BUILD_DIR" $SOURCES
+        run: clang++ -std=c++17 -Wall -Wextra -o "$BUILD_DIR/app" $SOURCES
 
       - name: Build (san)
         run: >
