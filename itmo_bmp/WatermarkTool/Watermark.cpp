@@ -1,6 +1,6 @@
 #include "Watermark.h"
 #include <cstdint>
-
+#include "Logger.h"
 namespace itmo_bmp {
 
 Pixel calc_merge_color(Pixel a, Pixel b) {
@@ -9,18 +9,25 @@ Pixel calc_merge_color(Pixel a, Pixel b) {
           .b = (uint8_t)((a.b + b.b) / 2)};
 }
 
-status_code apply_watermark(BMPImage &base, BMPImage &watermark,
-                    const char *output_path) {
-  uint32_t w_base = base.get_width();
-  uint32_t h_base = base.get_height();
-  uint32_t w_water = watermark.get_width();
-  uint32_t h_water = watermark.get_height();
-  
+bool apply_watermark(BMPImage &base, BMPImage &watermark,
+                     const char *output_path) {
+  const uint32_t w_base = base.get_width();
+  const uint32_t h_base = base.get_height();
+  const uint32_t w_water = watermark.get_width();
+  const uint32_t h_water = watermark.get_height();
+
+  if (w_base == 0 || h_base == 0 || w_water == 0 || h_water == 0) {
+    Logger::Error("Пустое изображение (основное или водяной знак)");
+    return false;
+  }
+
+  if (w_water > w_base || h_water > h_base) {
+    Logger::Error("Водяной знак больше основного изображения");
+    return false;
+  }
+
   BMPImage res;
   res.gen_empty_sheet(w_base, h_base, base.get_color_depth());
-  if (w_water > w_base || h_water > h_base) {
-    return status_code::kInvalidFile;
-  }
 
   Pixel a, b;
   for (uint32_t i = 0; i < h_base; ++i) {
@@ -30,8 +37,8 @@ status_code apply_watermark(BMPImage &base, BMPImage &watermark,
       res.set_pixel_color(j, i, calc_merge_color(a, b));
     }
   }
-  
-  
-  return res.save(output_path);
+
+  res.save(output_path);
+  return true;
 }
 } // namespace itmo_bmp
