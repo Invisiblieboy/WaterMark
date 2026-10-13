@@ -1,33 +1,40 @@
-
-
 name: CI
 
-
 on:
-  
-  push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [main]
+  push:
+    branches: [main]
 
-  
-  workflow_dispatch:
-
+env:
+  BUILD_DIR: ../../build
+  SOURCES: main.cpp ArgumentParser.cpp ../BMPImage/BMPImage.cpp Watermark.cpp
 
 jobs:
-  
-  check_build:
-    
+  build:
     runs-on: ubuntu-latest
-
-    
+    defaults:
+      run:
+        working-directory: ./itmo_bmp/WatermarkTool
     steps:
-      
-      - name: Checkout
-        uses: actions/checkout@v7
+      - uses: actions/checkout@v4
 
-      - name: Configure CMake
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - name: Создать папку сборки
+        run: mkdir -p "$BUILD_DIR"
 
       - name: Build
-        run: cmake --build build --parallel
+        run: clang++ -std=c++17 -Wall -Wextra -o "$BUILD_DIR/app" $SOURCES
+
+      - name: Build (san)
+        run: >
+          clang++ -std=c++17 -Wall -Wextra -g -O0
+          -fsanitize=address,undefined
+          -o "$BUILD_DIR/app_debug" $SOURCES
+
+      # - name: Запуск с санитайзерами
+      #   run: $BUILD_DIR/app_debug test_data/input.bmp out.bmp
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app
+          path: build/app
